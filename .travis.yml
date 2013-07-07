@@ -38,6 +38,8 @@ before_script:
  # Prepare library.
  - mkdir sites/all/libraries
  - drush make sites/all/modules/$DRUPAL_MODULE/$DRUPAL_MODULE.make . --no-core
+ # Make sure that library is downloaded.
+ - ls sites/all/libraries -la
  - drush en libraries --yes
  # For debugging: check which versions we use.
  # @todo Avoid hardcode.

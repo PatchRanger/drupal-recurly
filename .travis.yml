@@ -1,0 +1,60 @@
+language: php
+php:
+  - 5.4
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+# This is for make code abstract, facilitating copy-pasting.
+env:
+  - GITHUB_REPOSITORY=drupal-recurly DRUPAL_VERSION=7.x PROFILE=standard DRUPAL_MODULE=recurly
+  # Not the time for debugging D6 version.
+  #- GITHUB_REPOSITORY=drupal-recurly DRUPAL_VERSION=6.x PROFILE=default DRUPAL_MODULE=recurly
+
+before_script:
+ - mysql -e 'create database drupal;'
+ - pyrus channel-discover pear.drush.org
+ - pyrus install drush/drush-devel
+ - phpenv rehash
+ - cd ..
+ # Prepare Drupal.
+ - mkdir drupal
+ - cd drupal
+ - cp ../$GITHUB_REPOSITORY/$DRUPAL_VERSION/drupal.make drupal.make
+ - drush make drupal.make .
+ # Discover newly downloaded directory.
+ - ls -la
+ # Install Drupal.
+ - drush si $PROFILE --db-url=mysql://root:@localhost/drupal --yes
+ # Prepare Simpletest.
+ - sh -c "if [ '$DRUPAL_VERSION' = '6.x' ]; then cp sites/all/modules/simpletest/run-tests.sh scripts/run-tests.sh; fi"
+ - drush en simpletest --yes
+ # Prepare required modules.
+ - cp ../$GITHUB_REPOSITORY/$DRUPAL_VERSION/$DRUPAL_MODULE.make $DRUPAL_MODULE.make
+ - drush make $DRUPAL_MODULE.make . --no-core
+ - cp -R ../$GITHUB_REPOSITORY sites/all/modules/$DRUPAL_MODULE
+ # Prepare library.
+ - mkdir sites/all/libraries
+ - drush make sites/all/modules/$DRUPAL_MODULE/$DRUPAL_MODULE.make . --no-core
+ - drush en libraries --yes
+ # For debugging: check which versions we use.
+ # @todo Avoid hardcode.
+ - drush pm-info libraries moopapi_base $DRUPAL_MODULE
+ - drush en $DRUPAL_MODULE --yes
+ - drush cc all
+ - drush runserver --server=builtin 8080 &
+ - sleep 4
+ #- drush vset simpletest_verbose FALSE --yes
+ - drush vset simpletest_verbose TRUE --yes
+ # Create a directory to output results.
+ - mkdir results
+
+ # @todo Use variables instead of hardcode.
+script: php scripts/run-tests.sh --php ~/.phpenv/versions/5.4.16/bin/php --url 'http://127.0.0.1:8080' --verbose --file sites/all/modules/$DRUPAL_MODULE/$DRUPAL_MODULE.test
+ #drush test-run --xml --file=sites/all/modules/moopapi/core/simpletest.test --uri=http://127.0.0.1:8080
+
+after_script:
+ - cd results
+ - ls -la

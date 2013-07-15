@@ -11,17 +11,16 @@ api = 2
 
 ; Using GitHub repository, because I am not a maintainer of Recurly.
 ;; Download via git, because we don't want to wait while drupal.org builds a package.
-;libraries[moopapi][type] = module
-;libraries[moopapi][download][type] = git
-;libraries[moopapi][download][branch] = 7.x-2.x
-;libraries[moopapi][destination] = modules
+;libraries[recurly][type] = module
+;libraries[recurly][download][type] = git
+;libraries[recurly][download][branch] = 7.x-1.x
+;libraries[recurly][destination] = modules
 
 ; Dependencies.
-projects[clients][overwrite] = TRUE
-projects[clients][version] = 3.x-dev
-projects[entity][overwrite] = TRUE
-projects[entity][version] = 1.x-dev
-projects[libraries][overwrite] = TRUE
-projects[libraries][version] = 3.x-dev
-projects[remote_entity][overwrite] = TRUE
-projects[remote_entity][version] = 1.x-dev
+projects[http_client][overwrite] = TRUE
+projects[http_client][version] = 2.x-dev
+projects[wsclient][overwrite] = TRUE
+projects[wsclient][version] = 1.x-dev
+
+; Patches.
+projects[wsclient][patch][] = "http://drupal.org/files/wsclient-fix-tester-soap-hardcode-1977060.patch"

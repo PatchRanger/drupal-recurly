@@ -25,3 +25,4 @@ projects[wsclient][version] = 1.x-dev
 ; Patches.
 projects[http_client][patch][] = "http://drupal.org/files/http_client-2042205-create_basic_http_auth_plugin-2.patch"
 projects[wsclient][patch][] = "http://drupal.org/files/wsclient-fix-tester-soap-hardcode-1977060.patch"
+projects[wsclient][patch][] = "http://drupal.org/files/wsclient-1285310-http_basic_authentication-14.patch"

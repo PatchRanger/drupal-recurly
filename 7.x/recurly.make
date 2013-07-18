@@ -33,5 +33,8 @@ projects[wsclient][version] = 1.x-dev
 projects[http_client][patch][] = "http://drupal.org/files/http_client-2042205-create_basic_http_auth_plugin-2.patch"
 projects[wsclient][patch][] = "http://drupal.org/files/wsclient-fix-tester-soap-hardcode-1977060.patch"
 projects[wsclient][patch][] = "http://drupal.org/files/wsclient-1285310-http_basic_authentication-14.patch"
-projects[wsclient][patch][] = "http://drupal.org/files/wsclient-2044587-avoid_empty_remaining_parameters_inside_request_uri-1.patch"
-projects[wsclient_views][patch][] = "http://drupal.org/files/wsclient_views-2044669-recover_workability-1.patch"
+; Replaced by below.
+;projects[wsclient][patch][] = "http://drupal.org/files/wsclient-2044587-avoid_empty_remaining_parameters_inside_request_uri-1.patch"
+projects[wsclient][patch][] = "http://drupal.org/files/wsclient_rest-request_alter_commented-1934274.patch"
+; Patch is necessary, though it couldn't be applied such way.
+;projects[wsclient_views][patch][] = "http://drupal.org/files/wsclient_views-2044669-recover_workability-1.patch"
